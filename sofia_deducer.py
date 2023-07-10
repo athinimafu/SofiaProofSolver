@@ -7,9 +7,10 @@ class LogicalStructure:
     implication = ':'
     
     def __init__(self):
-        self.assumptions = {} # hash map containing the assumption block number as key and [ assumption,(index of implication) ] 
-        self.conclusions = {} # hash map containing the conclusion block number as key and [ conclusion ]  
-       
+        self.assumptions  = {} # hash map containing the assumption block number as key and [ assumption,(index of implication) ] 
+        self.conclusions  = {} # hash map containing the conclusion block number as key and [ conclusion ]  
+        self.proof_struct = []
+
     def get_block(self,theorem,start,end):
         if start < 0:
             print("theorem incorrect: missing  '[' ")
@@ -28,12 +29,13 @@ class LogicalStructure:
             if ch == self.opening:
                 if start != -1:
                     block += 1
-                start = i 
+                start = i
                 
             elif ch == self.closing:
                 if block in self.assumptions:
                     concl_start  = self.assumptions[block][1]
                     self.conclusions[block] = theorem[concl_start+1:i+1]
+                    #self.proof_struct.append([block,theorem[concl_start+1:i+1]])
                 if start == -1:
                     block -= 1
                 else:
@@ -41,8 +43,8 @@ class LogicalStructure:
                 start = -1
 
             elif ch == self.implication:
-
                 self.assumptions[block] = [theorem[prev_start:i],i]
+                #self.proof_struct.append([block,theorem[prev_start:i]])
 
 
                 
